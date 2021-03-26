@@ -13,6 +13,15 @@ struct typelist_t
 {
 };
 
+template <typename T>
+struct typeinfo_t
+{
+	const char* name()
+	{
+		return typeid(T).name();
+	}
+};
+
 template <typename Types>
 struct for_each_t
 {
@@ -21,30 +30,30 @@ struct for_each_t
 template <typename T>
 struct for_each_t<typelist_t<T>>
 {
-	template <template<typename> typename F>
+	template <typename F>
 	static void call()
 	{
-		F<T>{}();
+		F{}(typeinfo_t<T> {});
 	}
 };
 template <typename T, typename ...Ts>
 struct for_each_t<typelist_t<T, Ts...>>
 {
-	template <template<typename> typename F>
+	template <typename F>
 	static void call()
 	{
-		F<T>{}();
+		F{}(typeinfo_t<T> {});
 		for_each_t<typelist_t<Ts...>>::template call<F>();
 	}
 };
 
 
-template <typename T>
 struct Printer
 {
-	void operator()()
+	template <typename T>
+	void operator()(typeinfo_t<T> i)
 	{
-		std::cout << typeid(T).name() << ' ' << sizeof(T) << '\n';
+		std::cout << i.name() << ' ' << sizeof(T) << '\n';
 	}
 };
 
