@@ -123,7 +123,7 @@ struct SizePrinter
 	template <typename T>
 	void operator()(typeinfo_t<T> i)
 	{
-		std::cout << i.name() << ' ' << sizeof(typename decltype(i)::type) << '\n';
+		std::cout << sizeof(typename decltype(i)::type) << '\t' << i.name() << '\n';
 	}
 };
 
