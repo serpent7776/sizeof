@@ -6,6 +6,9 @@
 #include <string_view>
 #include <vector>
 #include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
 
 template <typename T>
 struct false_t
@@ -154,10 +157,11 @@ int main()
 			NAMED(std::string),
 			NAMED(std::string_view),
 			NAMED(std::vector<bool>),
-			NAMED(std::vector<char>),
 			NAMED(std::vector<std::string>),
-			NAMED(std::set<char>),
 			NAMED(std::set<int>),
+			NAMED(std::unordered_set<int>),
+			NAMED(std::map<int, int>),
+			NAMED(std::unordered_map<int, int>),
 			NAMED(SizePrinter)
 		>
 	>::call<SizePrinter>();
