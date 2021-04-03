@@ -131,7 +131,7 @@ struct SizePrinter
 	}
 };
 
-#define NAMED(t) named_t<strlen_t{#t}.length, string_buf_t{#t}, t>
+#define NAMED(...) named_t<strlen_t{#__VA_ARGS__}.length, string_buf_t{#__VA_ARGS__}, __VA_ARGS__>
 
 int main()
 {
