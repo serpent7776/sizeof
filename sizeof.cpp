@@ -116,18 +116,20 @@ struct SizePrinter
 	}
 };
 
+#define NAMED(t) named_t<string_buf_t{#t}.length, string_buf_t{#t}, t>
+
 int main()
 {
 	for_each_t<
 		typelist_t<
-			int,
-			named_t<4, string_buf_t{"int"}, int>,
-			named_t<8, string_buf_t{"int16_t"}, int16_t>,
-			named_t<8, string_buf_t{"int32_t"}, int32_t>,
-			named_t<8, string_buf_t{"int64_t"}, int64_t>,
-			named_t<7, string_buf_t{"size_t"}, size_t>,
-			named_t<10, string_buf_t{"ptrdiff_t"}, ptrdiff_t>,
-			named_t<6, string_buf_t{"void*"}, void*>
+			char,
+			NAMED(int),
+			NAMED(int16_t),
+			NAMED(int32_t),
+			NAMED(int64_t),
+			NAMED(size_t),
+			NAMED(ptrdiff_t),
+			NAMED(void*)
 		>
 	>::call<SizePrinter>();
 	return 0;
