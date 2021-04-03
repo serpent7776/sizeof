@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <cstdint>
+#include <algorithm>
 #include <iostream>
 
 template <typename T>
@@ -22,10 +23,7 @@ struct string_buf_t
 
 	constexpr string_buf_t(const char* s)
 	{
-		for (size_t i = 0; i < length; ++i)
-		{
-			buf[i] = s[i];
-		}
+		std::copy(s, s + length, buf);
 	}
 
 	constexpr operator const char*() const
