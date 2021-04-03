@@ -2,6 +2,10 @@
 #include <cstdint>
 #include <algorithm>
 #include <iostream>
+#include <string>
+#include <string_view>
+#include <vector>
+#include <set>
 
 template <typename T>
 struct false_t
@@ -134,13 +138,27 @@ int main()
 	for_each_t<
 		typelist_t<
 			char,
+			NAMED(short),
 			NAMED(int),
+			NAMED(long),
+			NAMED(long long),
+			NAMED(float),
+			NAMED(double),
 			NAMED(int16_t),
 			NAMED(int32_t),
 			NAMED(int64_t),
 			NAMED(size_t),
 			NAMED(ptrdiff_t),
-			NAMED(void*)
+			NAMED(void*),
+			NAMED(long[10]),
+			NAMED(std::string),
+			NAMED(std::string_view),
+			NAMED(std::vector<bool>),
+			NAMED(std::vector<char>),
+			NAMED(std::vector<std::string>),
+			NAMED(std::set<char>),
+			NAMED(std::set<int>),
+			NAMED(SizePrinter)
 		>
 	>::call<SizePrinter>();
 	return 0;
