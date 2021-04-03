@@ -34,6 +34,17 @@ struct string_buf_t
 template<size_t N>
 string_buf_t(const char (&)[N]) -> string_buf_t<N>;
 
+template <size_t N>
+struct strlen_t
+{
+	static constexpr size_t length = N;
+
+	constexpr strlen_t(const char (&)[N])
+	{}
+};
+template<size_t N>
+strlen_t(const char (&)[N]) -> strlen_t<N>;
+
 template <size_t N, string_buf_t<N> s, typename T>
 struct named_t
 {
@@ -116,7 +127,7 @@ struct SizePrinter
 	}
 };
 
-#define NAMED(t) named_t<string_buf_t{#t}.length, string_buf_t{#t}, t>
+#define NAMED(t) named_t<strlen_t{#t}.length, string_buf_t{#t}, t>
 
 int main()
 {
