@@ -109,7 +109,7 @@ struct for_each_t<typelist_t<T, Ts...>>
 };
 
 
-struct Printer
+struct SizePrinter
 {
 	template <typename T>
 	void operator()(typeinfo_t<T> i)
@@ -131,6 +131,6 @@ int main()
 			named_t<10, string_buf_t{"ptrdiff_t"}, ptrdiff_t>,
 			named_t<6, string_buf_t{"void*"}, void*>
 		>
-	>::call<Printer>();
+	>::call<SizePrinter>();
 	return 0;
 }
