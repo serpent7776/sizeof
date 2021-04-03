@@ -18,11 +18,11 @@ struct string_buf_t
 {
 	char buf[N];
 
-	static constexpr size_t lenght = N;
+	static constexpr size_t length = N;
 
 	constexpr string_buf_t(const char* s)
 	{
-		for (size_t i = 0; i < lenght; ++i)
+		for (size_t i = 0; i < length; ++i)
 		{
 			buf[i] = s[i];
 		}
