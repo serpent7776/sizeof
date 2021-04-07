@@ -11,17 +11,6 @@
 #include <unordered_map>
 #include <variant>
 
-template <typename T>
-struct false_t
-{
-	static constexpr bool value = false;
-};
-
-template <typename ...T>
-struct typelist_t
-{
-};
-
 template <size_t N>
 struct string_buf_t
 {
@@ -81,47 +70,13 @@ struct typeinfo_t<named_t<N, s, T>>
 	}
 };
 
-template <typename Types>
+template <typename ...Ts>
 struct for_each_t
 {
-	static_assert(false_t<Types>::value);
-};
-template <size_t N, string_buf_t<N> s, typename T>
-struct for_each_t<typelist_t<named_t<N, s, T>>>
-{
 	template <typename F>
 	static void call()
 	{
-		F{}(typeinfo_t<named_t<N, s, T>> {});
-	}
-};
-template <typename T>
-struct for_each_t<typelist_t<T>>
-{
-	template <typename F>
-	static void call()
-	{
-		F{}(typeinfo_t<T> {});
-	}
-};
-template <size_t N, string_buf_t<N> s, typename T, typename ...Ts>
-struct for_each_t<typelist_t<named_t<N, s, T>, Ts...>>
-{
-	template <typename F>
-	static void call()
-	{
-		F{}(typeinfo_t<named_t<N, s, T>> {});
-		for_each_t<typelist_t<Ts...>>::template call<F>();
-	}
-};
-template <typename T, typename ...Ts>
-struct for_each_t<typelist_t<T, Ts...>>
-{
-	template <typename F>
-	static void call()
-	{
-		F{}(typeinfo_t<T> {});
-		for_each_t<typelist_t<Ts...>>::template call<F>();
+		(F{}(typeinfo_t<Ts> {}), ...);
 	}
 };
 
@@ -140,32 +95,30 @@ struct SizePrinter
 int main()
 {
 	for_each_t<
-		typelist_t<
-			char,
-			NAMED(short),
-			NAMED(int),
-			NAMED(long),
-			NAMED(long long),
-			NAMED(float),
-			NAMED(double),
-			NAMED(int16_t),
-			NAMED(int32_t),
-			NAMED(int64_t),
-			NAMED(size_t),
-			NAMED(ptrdiff_t),
-			NAMED(void*),
-			NAMED(long[10]),
-			NAMED(std::string),
-			NAMED(std::string_view),
-			NAMED(std::vector<bool>),
-			NAMED(std::vector<std::string>),
-			NAMED(std::set<int>),
-			NAMED(std::unordered_set<int>),
-			NAMED(std::map<int, int>),
-			NAMED(std::unordered_map<int, int>),
-			NAMED(std::variant<std::string>),
-			NAMED(SizePrinter)
-		>
+		char,
+		NAMED(short),
+		NAMED(int),
+		NAMED(long),
+		NAMED(long long),
+		NAMED(float),
+		NAMED(double),
+		NAMED(int16_t),
+		NAMED(int32_t),
+		NAMED(int64_t),
+		NAMED(size_t),
+		NAMED(ptrdiff_t),
+		NAMED(void*),
+		NAMED(long[10]),
+		NAMED(std::string),
+		NAMED(std::string_view),
+		NAMED(std::vector<bool>),
+		NAMED(std::vector<std::string>),
+		NAMED(std::set<int>),
+		NAMED(std::unordered_set<int>),
+		NAMED(std::map<int, int>),
+		NAMED(std::unordered_map<int, int>),
+		NAMED(std::variant<std::string>),
+		NAMED(SizePrinter)
 	>::call<SizePrinter>();
 	return 0;
 }
