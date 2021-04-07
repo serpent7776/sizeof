@@ -9,6 +9,7 @@
 #include <unordered_set>
 #include <map>
 #include <unordered_map>
+#include <variant>
 
 template <typename T>
 struct false_t
@@ -162,6 +163,7 @@ int main()
 			NAMED(std::unordered_set<int>),
 			NAMED(std::map<int, int>),
 			NAMED(std::unordered_map<int, int>),
+			NAMED(std::variant<std::string>),
 			NAMED(SizePrinter)
 		>
 	>::call<SizePrinter>();
