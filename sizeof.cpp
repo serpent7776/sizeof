@@ -11,6 +11,19 @@
 #include <unordered_map>
 #include <variant>
 
+template <typename ...T>
+struct typelist_t
+{
+	template <template <typename> typename F>
+	using map = typelist_t<F<T>...>;
+
+	template <template <typename> typename F>
+	static constexpr void apply()
+	{
+		(F<T>{}(), ...);
+	}
+};
+
 template <size_t N>
 struct string_buf_t
 {
@@ -54,7 +67,7 @@ struct typeinfo_t
 {
 	using type = T;
 
-	const char* name()
+	static const char* name()
 	{
 		return typeid(T).name();
 	}
@@ -64,29 +77,30 @@ struct typeinfo_t<named_t<N, s, T>>
 {
 	using type = T;
 
-	const char* name()
+	static const char* name()
 	{
 		return s;
 	}
 };
 
-template <typename ...Ts>
+template <typename typelist>
 struct for_each_t
 {
-	template <typename F>
+	template <template <typename> typename F>
 	static void call()
 	{
-		(F{}(typeinfo_t<Ts> {}), ...);
+		using typeinfo_list = typename typelist::template map<typeinfo_t>;
+		typeinfo_list::template apply<F>();
 	}
 };
 
 
+template <typename TypeInfo>
 struct SizePrinter
 {
-	template <typename T>
-	void operator()(typeinfo_t<T> i)
+	void operator()()
 	{
-		std::cout << sizeof(typename decltype(i)::type) << '\t' << i.name() << '\n';
+		std::cout << sizeof(typename TypeInfo::type) << '\t' << TypeInfo::name() << '\n';
 	}
 };
 
@@ -94,7 +108,7 @@ struct SizePrinter
 
 int main()
 {
-	for_each_t<
+	using types = typelist_t<
 		char,
 		NAMED(short),
 		NAMED(int),
@@ -118,7 +132,8 @@ int main()
 		NAMED(std::map<int, int>),
 		NAMED(std::unordered_map<int, int>),
 		NAMED(std::variant<std::string>),
-		NAMED(SizePrinter)
-	>::call<SizePrinter>();
+		NAMED(SizePrinter<typeinfo_t<char>>)
+	>;
+	for_each_t<types>::call<SizePrinter>();
 	return 0;
 }
