@@ -10,6 +10,7 @@
 #include <map>
 #include <unordered_map>
 #include <variant>
+#include <optional>
 
 template <typename ...T>
 struct typelist_t
@@ -126,12 +127,18 @@ int main()
 		NAMED(std::string),
 		NAMED(std::string_view),
 		NAMED(std::vector<bool>),
+		NAMED(std::vector<int>),
 		NAMED(std::vector<std::string>),
 		NAMED(std::set<int>),
 		NAMED(std::unordered_set<int>),
 		NAMED(std::map<int, int>),
 		NAMED(std::unordered_map<int, int>),
 		NAMED(std::variant<std::string>),
+		NAMED(std::variant<std::string, std::vector<bool>>),
+		NAMED(std::optional<bool>),
+		NAMED(std::optional<int>),
+		NAMED(std::optional<std::string>),
+		NAMED(decltype([](){})),
 		NAMED(SizePrinter<typeinfo_t<char>>)
 	>;
 	for_each_t<types>::call<SizePrinter>();
