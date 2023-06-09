@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include <variant>
 #include <optional>
+#include <list>
+#include <forward_list>
 
 template <typename ...T>
 struct typelist_t
@@ -138,6 +140,10 @@ int main()
 		NAMED(std::optional<bool>),
 		NAMED(std::optional<int>),
 		NAMED(std::optional<std::string>),
+		NAMED(std::list<int>),
+		NAMED(std::list<long long>),
+		NAMED(std::forward_list<int>),
+		NAMED(std::forward_list<long long>),
 		NAMED(decltype([](){})),
 		NAMED(SizePrinter<typeinfo_t<char>>)
 	>;
