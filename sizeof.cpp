@@ -113,6 +113,7 @@ int main()
 {
 	using types = typelist_t<
 		char,
+		NAMED(wchar_t),
 		NAMED(short),
 		NAMED(int),
 		NAMED(long),
