@@ -109,6 +109,18 @@ struct SizePrinter
 
 #define NAMED(...) named_t<strlen_t{#__VA_ARGS__}.length, string_buf_t{#__VA_ARGS__}, __VA_ARGS__>
 
+struct bits1 {
+	char a : 3;
+	char : 0;
+	char c : 3;
+};
+
+struct bits2 {
+	unsigned a : 3;
+	unsigned : 0;
+	unsigned c : 3;
+};
+
 int main()
 {
 	using types = typelist_t<
@@ -146,7 +158,9 @@ int main()
 		NAMED(std::forward_list<int>),
 		NAMED(std::forward_list<long long>),
 		NAMED(decltype([](){})),
-		NAMED(SizePrinter<typeinfo_t<char>>)
+		NAMED(SizePrinter<typeinfo_t<char>>),
+		NAMED(bits1),
+		NAMED(bits2)
 	>;
 	for_each_t<types>::call<SizePrinter>();
 	return 0;
